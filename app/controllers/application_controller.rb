@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  before_action :authenticate_request
 
   $drive_type = ENV['SERVICE_TYPE']
   $file_path = ENV['FILE_PATH']
@@ -26,8 +27,16 @@ class ApplicationController < ActionController::API
   end
 
   private
-
   def store_params
     params.require(:drive).permit(:id,:data)
+  end
+
+  private
+  def authenticate_request
+    auth_header = request.headers['Authorization']
+    token = auth_header&.split(' ')&.last
+    unless token == "valid_token"
+      render json: { error: 'Not Authorized' }, status: 401
+    end
   end
 end
