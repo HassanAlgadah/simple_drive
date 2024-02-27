@@ -7,7 +7,7 @@ class ApplicationController < ActionController::API
   end
   def store
     @drive = DriveFactory.create_drive($drive_type)
-    result = @drive.store_data(id = store_params[:BlobId],blob = store_params[:Blob])
+    result = @drive.store_data(id = store_params[:id],blob = store_params[:data])
     if result[:success]
       render json: result
     else
@@ -17,7 +17,7 @@ class ApplicationController < ActionController::API
 
   def get_blob
     @drive = DriveFactory.create_drive($drive_type)
-    result = @drive.get_file_data(params[:BlobId])
+    result = @drive.get_file_data(params[:id])
     if result[:success]
       render json: result[:data].to_json
     else
@@ -28,6 +28,6 @@ class ApplicationController < ActionController::API
   private
 
   def store_params
-    params.require(:drive).permit(:BlobId,:Blob)
+    params.require(:drive).permit(:id,:data)
   end
 end
