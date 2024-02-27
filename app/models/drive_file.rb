@@ -1,0 +1,2 @@
+class DriveFile < ApplicationRecord
+end
